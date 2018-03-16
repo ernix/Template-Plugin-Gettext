@@ -20,7 +20,7 @@
 
 use strict;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Template;
 
@@ -35,3 +35,19 @@ EOF
 $tt->process(\$template, {}, \$output) or die $tt->error;
 is $output, 'Hello, world!';
 
+
+subtest utf8_flag => sub {
+    use utf8;
+    my $tt2 = Template->new(ENCODING => 'utf8') or die Template->error;
+
+    my $template = <<'EOF';
+[%- USE Gettext -%]
+[%- 'こんにちは、{who}!' | xgettext(who => name) -%]
+EOF
+
+    my $output;
+    $tt2->process(\$template, { name => '世界' }, \$output)
+        or die $tt->error;
+
+    is $output, 'こんにちは、世界';
+};
