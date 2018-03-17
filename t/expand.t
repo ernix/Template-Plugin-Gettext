@@ -53,5 +53,5 @@ EOF
     $tt2->process(\$template, { name => '世界' }, \$output)
         or die $tt->error;
 
-    is $output, 'こんにちは、世界';
+    is $output, 'こんにちは、世界!';
 };
